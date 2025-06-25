@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  investa-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: investa-laravel-app
+    container_name: investa-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www
+    depends_on:
+      - investa-db
+    networks:
+      - investa-network
+
+  investa-db:
+    image: mysql:8.0
+    container_name: investa-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: investa_pass
+      MYSQL_USER: investa_user
+      MYSQL_PASSWORD: investa_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - investa-network
+
+networks:
+  investa-network:
+
+volumes:
+  dbdata:
